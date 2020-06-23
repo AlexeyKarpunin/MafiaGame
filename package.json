@@ -7,14 +7,16 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^7.3.1",
-    "jest": "^26.0.1",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "jest": "^26.0.1"
   },
   "dependencies": {
+    "express": "^4.17.1"
   },
   "scripts": {
     "lint": "eslint ./script",
     "lint:fix": "eslint ./script --fix",
-    "test": "jest"
+    "test": "jest",
+    "start": "node ./script/main.js"
   }
 }
