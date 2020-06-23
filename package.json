@@ -1,0 +1,20 @@
+{
+  "name": "mafiagame",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": "https://github.com/KarpuninAlexey/MafiaGame.git",
+  "author": "KarpuninAlexey <mr.offlain@mail.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.3.1",
+    "jest": "^26.0.1",
+    "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+  },
+  "scripts": {
+    "lint": "eslint ./script",
+    "lint:fix": "eslint ./script --fix",
+    "test": "jest"
+  }
+}
