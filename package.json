@@ -14,14 +14,16 @@
   "scripts": {
     "start_react": "react-scripts start",
     "build_react": "react-scripts build",
-    "test_react": "react-scripts test",
+    "test_react": "react-scripts test --watchAll=false",
+    "test_backend": "yarn jest app.test.js",
     "eject_react": "react-scripts eject",
     "start": "yarn build_react && node index.js",
-    "test": "jest"
+    "test": "yarn jest backend/test/ &&  yarn test_react"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+ 
   "browserslist": {
     "production": [
       ">0.2%",
