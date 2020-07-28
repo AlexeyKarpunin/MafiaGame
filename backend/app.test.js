@@ -4,5 +4,6 @@ const {app} = require('./app');
 test('test of test', () => {
   request(app)
       .get('/api/test')
-      .expect({message: 'working'});
+      .expect({message: 'working'})
+      .end();
 });
