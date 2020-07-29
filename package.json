@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
@@ -15,15 +16,15 @@
     "start_react": "react-scripts start",
     "build_react": "react-scripts build",
     "test_react": "react-scripts test --watchAll=false",
-    "test_backend": "yarn jest app.test.js",
+    "test_backend": "yarn jest backend/test/",
     "eject_react": "react-scripts eject",
     "start": "yarn build_react && node index.js",
+    "start_nodemon": "yarn build_react && nodemon index.js",
     "test": "yarn jest backend/test/ &&  yarn test_react"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
- 
   "browserslist": {
     "production": [
       ">0.2%",
@@ -40,6 +41,7 @@
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.14.0",
     "jest": "^24.9.0",
+    "nodemon": "^2.0.4",
     "supertest": "^4.0.2"
   }
 }
