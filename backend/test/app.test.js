@@ -37,3 +37,26 @@ describe('testing /api/game method: GET', () => {
     expect(status).toEqual(404);
   });
 });
+
+describe('Test API /api/game/:gameId/place', () => {
+  test('Good result and if place was occupated', async () => {
+    const post = await request(app).post('/api/game');
+    const tokenForDecod = post.body.token;
+    const decoded = jwt.decode(tokenForDecod);
+    const {id} = decoded;
+    const body = {
+      'place': 'player1',
+      'role': undefined,
+    };
+    const put = await request(app).put(`/api/game/${id}/place`).send(body);
+    expect(put.status).toEqual(200);
+    const secondPut = await request(app)
+        .put(`/api/game/${id}/place`).send(body);
+    expect(secondPut.body).toEqual({message: 'Place was occupated'});
+  });
+  test('id is not true', async () => {
+    const id = 'falseId';
+    const put = await request(app).put(`/api/game/${id}/place`);
+    expect(put.body).toEqual({message: 'game was not founded'});
+  });
+});
