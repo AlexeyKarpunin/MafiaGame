@@ -1,4 +1,4 @@
-const {GameRegister} = require('../GameRegister');
+const {GameRegister} = require('../src/GameRegister');
 describe('Good test for register', () => {
   const register = new GameRegister();
   const id = '0221685';

@@ -1,6 +1,6 @@
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const {app} = require('../app');
+const {app} = require('../src/app');
 
 test('test of test', async () => {
   const req = await request(app).get('/api/test');

@@ -1,4 +1,4 @@
-const {Game} = require('../Game');
+const {Game} = require('../src/Game');
 
 describe('TakePlace function', () => {
   test('place is free and if place was occupated', () => {
