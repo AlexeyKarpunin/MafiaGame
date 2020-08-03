@@ -6,7 +6,6 @@
   "scripts": {
     "start": "yarn workspace frontend build && node index.js",
     "start_nodemon": "yarn workspace frontend build && nodemon index.js",
-
     "test_backend": "yarn workspace backend jest ./test ",
     "test_frontend": "yarn workspace frontend test --watchAll=false",
     "test": "yarn test_backend && yarn test_frontend"
