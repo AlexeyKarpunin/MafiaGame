@@ -1,62 +1,64 @@
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
 const {app} = require('../src/app');
 
-test('test of test', async () => {
-  const req = await request(app).get('/api/test');
-  expect(req.body).toEqual({message: 'success'});
+let createGame;
+let takePlace;
+let invalidGameId;
+
+beforeEach( async () => {
+  invalidGameId = 'dasfioqr783sgb91dsa-w-ekd03131';
+  createGame = await request(app).post('/api/game');
+  takePlace = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/place`)
+      .send({'place': 'player2'});
 });
 
-test('testing /api/game method: POST', async () => {
-  const req = await request(app).post('/api/game');
-  expect(req.status).toEqual(201);
-  expect(req.body.token).not.toBeUndefined();
+test('POST API /api/game create game', async () => {
+  expect(createGame.status).toEqual(201);
 });
 
-describe('testing /api/game method: GET', () => {
-  test('Good id', async () => {
-    const req = await request(app).post('/api/game');
-    const tokenForDecod = req.body.token;
-    const decoded = jwt.decode(tokenForDecod);
-    const {id} = decoded;
-    const body = {
-      'gameId': id,
-    };
-    const getReq = await request(app).get('/api/game').send(body);
-    const info = await getReq;
-    expect(info.status).toEqual(201);
-    expect(info.body.token).not.toBeUndefined();
-  });
-
-  test('Bad id', async () => {
-    const body = {
-      'gameId': 'fhdf8237837foax836rhc203',
-    };
-    const getReq = await request(app).get('/api/game').send(body);
-    const {status} = await getReq;
-    expect(status).toEqual(404);
-  });
+test('GET API /api/game connect to game', async () => {
+  const {gameId} = createGame.body;
+  const get = await request(app).get('/api/game').send({'gameId': gameId});
+  expect(get.status).toEqual(201);
+  const badGet = await request(app).get('/api/game')
+      .send({'gameId': 'cmashsaetweydasd'});
+  expect(badGet.status).toEqual(404);
 });
 
-describe('Test API /api/game/:gameId/place', () => {
-  test('Good result and if place was occupated', async () => {
-    const post = await request(app).post('/api/game');
-    const tokenForDecod = post.body.token;
-    const decoded = jwt.decode(tokenForDecod);
-    const {id} = decoded;
-    const body = {
-      'place': 'player1',
-      'role': undefined,
-    };
-    const put = await request(app).put(`/api/game/${id}/place`).send(body);
-    expect(put.status).toEqual(200);
-    const secondPut = await request(app)
-        .put(`/api/game/${id}/place`).send(body);
-    expect(secondPut.body).toEqual({message: 'Place was occupated'});
-  });
-  test('id is not true', async () => {
-    const id = 'falseId';
-    const put = await request(app).put(`/api/game/${id}/place`);
-    expect(put.body).toEqual({message: 'game was not founded'});
-  });
+test('PUT API /api/game/:gameId/place take place on the table', async () => {
+  expect(takePlace.status).toEqual(200);
+  const BadPut = await request(app).put(`/api/game/${invalidGameId}/place`)
+      .send({'place': 'player2'});
+  expect(BadPut.status).toEqual(404);
+});
+
+test('PUT API /api/game/:gameId/name change user name', async () => {
+  const put = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/name`)
+      .send({'newName': 'Alex', 'userId': takePlace.body.userId});
+  const badPutGameId = await request(app)
+      .put(`/api/game/${invalidGameId}/name`)
+      .send({'newName': 'Alex', 'userId': takePlace.body.userId});
+  const badPutUserId = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/name`)
+      .send({'newName': 'Alex', 'userId': 's1231fas1'});
+  expect(put.status).toEqual(200);
+  expect(badPutGameId.status).toEqual(404);
+  expect(badPutUserId.status).toEqual(404);
+});
+
+test('PUT API /api/game/:gameId/status change user status', async () => {
+  const put = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/status`)
+      .send({'status': 'ready', 'userId': takePlace.body.userId});
+  const badPutGameId = await request(app)
+      .put(`/api/game/${invalidGameId}/name`)
+      .send({'status': 'ready', 'userId': takePlace.body.userId});
+  const badPutUserId = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/name`)
+      .send({'status': 'ready', 'userId': 's1231fas1'});
+  expect(put.status).toEqual(200);
+  expect(badPutGameId.status).toEqual(404);
+  expect(badPutUserId.status).toEqual(404);
 });

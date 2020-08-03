@@ -26,7 +26,7 @@ class GameRegister {
    * @return {boolean}
    */
   register(id, game) {
-    if (this._map.has(id)) {
+    if (this._map.has(id) && game !== undefined) {
       return false;
     }
     this._map.set(id, game);

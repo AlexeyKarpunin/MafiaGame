@@ -1,15 +1,21 @@
 const {Game} = require('../src/Game');
+const {User} = require('../src/User');
 
-describe('TakePlace function', () => {
-  test('place is free and if place was occupated', () => {
-    const game = new Game();
-    const player = {
-      place: 'player2',
-      status: 'not ready',
-      role: undefined,
-    };
-    game.takeplace(player);
-    expect(game._player2 === player).toEqual(true);
-    expect(game.takeplace(player)).toEqual(false);
-  });
+test('takePlace function', () => {
+  const game = new Game();
+  const user = new User();
+  const userId = '123456789';
+  expect(game.takePlace(userId, user, 'player1')).toEqual(true);
+  expect(game.takePlace(userId, user, 'player1')).toEqual(false);
 });
+
+test('findPlayer function', () => {
+  const game = new Game();
+  const user = new User();
+  const userId = '123456789';
+  const invalidId = 'd18c41y1d31';
+  game.takePlace(userId, user, 'player1');
+  expect(game.findPlayer(userId)).toEqual(user);
+  expect(game.findPlayer(invalidId)).toEqual(false);
+});
+

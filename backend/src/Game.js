@@ -1,3 +1,4 @@
+
 /**
  * class Game with setting for game
  */
@@ -7,35 +8,40 @@ class Game {
    */
   constructor() {
     this._status = 'created';
-    this._player1 = undefined;
-    this._player2 = undefined;
-    this._player3 = undefined;
-    this._player4 = undefined;
+    this._players = new Map();
   }
+
   /**
    * take place at the table
-   * @param {object} player
+   * @param {string} userId
+   * @param {class} user
+   * @param {string} place
    * This object whith setting for player {status, role, ...}
    * @return {boolean} false of true
    */
-  takeplace(player) {
-    if (player.place === 'player1' && this._player1 === undefined) {
-      this._player1 = player;
-      return true;
-    } else if (player.place === 'player2' && this._player2 === undefined) {
-      this._player2 = player;
-      return true;
-    } else if (player.place === 'player3' && this._player3 === undefined) {
-      this._player3 = player;
-      return true;
-    } else if (player.place === 'player4' && this._player4 === undefined) {
-      this._player4 = player;
+  takePlace(userId, user, place) {
+    if (!this._players.has(userId)) {
+      this._players.set(userId, user);
+      const gamer = this._players.get(userId);
+      gamer.changeUserPlace(place);
       return true;
     } else {
       return false;
     }
   }
+  /**
+   * @param {string} player
+   * @return {object}
+   */
+  findPlayer(player) {
+    const gamer = this._players.get(player);
+    if (!gamer) {
+      return false;
+    }
+    return gamer;
+  }
 }
+
 module.exports = {
   Game,
 };
