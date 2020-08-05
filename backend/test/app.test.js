@@ -1,5 +1,6 @@
 const request = require('supertest');
 const {app} = require('../src/app');
+const {status} = require('../src/config').config;
 
 let createGame;
 let takePlace;
@@ -61,4 +62,54 @@ test('PUT API /api/game/:gameId/status change user status', async () => {
   expect(put.status).toEqual(200);
   expect(badPutGameId.status).toEqual(404);
   expect(badPutUserId.status).toEqual(404);
+});
+
+test('GET API /api/game/:gameId/check checking readiness players', async () => {
+  // first player
+  const player1 = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/place`)
+      .send({'place': 'player1'});
+  const userIdForPlayer1 = player1.body.userId;
+  await request(app)
+      .put(`/api/game/${createGame.body.gameId}/status`)
+      .send({'status': status.ready, 'userId': userIdForPlayer1});
+  // bad gameId
+  const badget = await request(app).
+      get(`/api/game/${invalidGameId}/check`);
+  expect(badget.status).toEqual(404);
+  // second player
+  await request(app)
+      .put(`/api/game/${createGame.body.gameId}/status`)
+      .send({'status': status.ready, 'userId': takePlace.body.userId});
+  // third player
+  const player3 = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/place`)
+      .send({'place': 'player3'});
+  const userIdForPlayer3 = player3.body.userId;
+  await request(app)
+      .put(`/api/game/${createGame.body.gameId}/status`)
+      .send({'status': status.ready, 'userId': userIdForPlayer3});
+  // Early request
+  const getEarly = await request(app).
+      get(`/api/game/${createGame.body.gameId}/check`);
+  expect(getEarly.status).toEqual(304);
+  // fourth player
+  const player4 = await request(app)
+      .put(`/api/game/${createGame.body.gameId}/place`)
+      .send({'place': 'player4'});
+  const userIdForPlayer4 = player4.body.userId;
+  await request(app)
+      .put(`/api/game/${createGame.body.gameId}/status`)
+      .send({'status': status.ready, 'userId': userIdForPlayer4});
+  const get = await request(app).
+      get(`/api/game/${createGame.body.gameId}/check`);
+  expect(get.status).toEqual(200);
+});
+
+test('PUT API /api/game/:gameId/roles give roles for players ', async () => {
+  const {gameId} = createGame.body;
+  const put = await request(app).put(`/api/game/${gameId}/roles`);
+  const badPut = await request(app).put(`/api/game/${invalidGameId}/roles`);
+  expect(badPut.status).toEqual(404);
+  expect(put.status).toEqual(200);
 });

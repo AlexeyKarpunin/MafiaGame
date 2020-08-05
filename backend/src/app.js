@@ -71,10 +71,33 @@ app.put('/api/game/:gameId/status', (req, res) => {
       res.status(404).json({message: 'player was not found'});
     } else {
       player.changeUserStatus(status);
-      res.status(200).json({player: player});
+      res.status(200).json({player: player, game: game});
     }
   }
 });
+// Are players ready to start game ?
+app.get('/api/game/:gameId/check', (req, res) => {
+  const {gameId} = req.params;
+  const game = register.find(gameId);
+  if (!game) {
+    res.status(404).json({message: 'game was not found'});
+  }
+  if (game.checkingPlayersForReadiness()) {
+    res.status(200).json({message: 'game can be started'});
+  }
+  res.status(304).json({message: 'Not all players ready'});
+});
+// Give roles for players ...
+app.put('/api/game/:gameId/roles', (req, res) => {
+  const {gameId} = req.params;
+  const game = register.find(gameId);
+  if (!game) {
+    res.status(404).json({message: 'game was not found'});
+  }
+  game.givingRoleForPlayers();
+  res.status(200).json({message: 'Players were given  roles'});
+});
+
 module.exports = {
   app,
 };

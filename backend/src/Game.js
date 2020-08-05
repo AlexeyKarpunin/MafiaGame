@@ -1,4 +1,4 @@
-
+const {status, gameSetForFourthPlayers} = require('../src/config').config;
 /**
  * class Game with setting for game
  */
@@ -7,8 +7,9 @@ class Game {
    * this is constructor
    */
   constructor() {
-    this._status = 'created';
+    this._status = status.created;
     this._players = new Map();
+    this._readinessPlayersToStart = false;
   }
 
   /**
@@ -40,8 +41,38 @@ class Game {
     }
     return gamer;
   }
+  /**
+   * give roles for plyers
+   */
+  givingRoleForPlayers() {
+    // eslint-disable-next-line max-len
+    let randomNumber = Math.floor(Math.random() * gameSetForFourthPlayers.players);
+    this._players.forEach((value) => {
+      if (randomNumber === 0) {
+        value._role = gameSetForFourthPlayers.mafia;
+      } else {
+        value._role = gameSetForFourthPlayers.peace;
+      }
+      randomNumber--;
+    });
+  }
+  /**
+   * checking status of players
+   * @return {boolean}
+   */
+  checkingPlayersForReadiness() {
+    let counterPlayerWhoReady = 0;
+    this._players.forEach((value) => {
+      if (value._status === status.ready) {
+        counterPlayerWhoReady++;
+      }
+    });
+    if (this._players.size === 4 && counterPlayerWhoReady === 4) {
+      this._readinessPlayersToStart = true;
+      return true;
+    }
+  }
 }
-
 module.exports = {
   Game,
 };
