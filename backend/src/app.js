@@ -16,8 +16,8 @@ app.post('/api/game', (req, res) => {
 });
 
 // Get API connect to game
-app.get('/api/game', (req, res) => {
-  const {gameId} = req.body;
+app.get('/api/game/:gameId', (req, res) => {
+  const {gameId} = req.params;
   const game = register.find(gameId);
   if (!game) {
     res.status(404).json({message: 'game did not found'});

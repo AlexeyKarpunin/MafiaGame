@@ -20,10 +20,9 @@ test('POST API /api/game create game', async () => {
 
 test('GET API /api/game connect to game', async () => {
   const {gameId} = createGame.body;
-  const get = await request(app).get('/api/game').send({'gameId': gameId});
+  const get = await request(app).get(`/api/game/${gameId}`);
   expect(get.status).toEqual(201);
-  const badGet = await request(app).get('/api/game')
-      .send({'gameId': 'cmashsaetweydasd'});
+  const badGet = await request(app).get(`/api/game/${invalidGameId}`);
   expect(badGet.status).toEqual(404);
 });
 
