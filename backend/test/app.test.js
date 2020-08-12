@@ -1,7 +1,7 @@
 const request = require('supertest');
 const {app} = require('../src/app');
 const {status} = require('../src/config').config;
-// travis test //
+
 let createGame;
 let takePlace;
 let invalidGameId;
