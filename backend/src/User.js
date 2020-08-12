@@ -17,7 +17,7 @@ class User {
   /**
  * @param {string} newName
  */
-  changeUserName(newName) {
+  changeUserName(newName) { // испотльзуй SET в названии
     this._name = newName;
   }
   /**

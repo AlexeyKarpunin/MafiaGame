@@ -1,6 +1,6 @@
 const {Game} = require('../src/Game');
 const {User} = require('../src/User');
-const {status} = require('../src/config').config;
+const {status, messages} = require('../src/config').config;
 
 test('takePlace function', () => {
   const game = new Game();
@@ -17,7 +17,7 @@ test('findPlayer function', () => {
   const invalidId = 'd18c41y1d31';
   game.takePlace(userId, user, 'player1');
   expect(game.findPlayer(userId)).toEqual(user);
-  expect(game.findPlayer(invalidId)).toEqual(false);
+  expect(game.findPlayer(invalidId)).toEqual(messages.PlayerNotFound);
 });
 
 test('checkingPlayersForReadiness function and givingRoleForPlayers', () => {
@@ -46,13 +46,13 @@ test('checkingPlayersForReadiness function and givingRoleForPlayers', () => {
   game.takePlace(users.user4.userId, users.user4.user, 'player4');
   game.findPlayer(users.user1.userId).changeUserStatus(status.ready);
   game.findPlayer(users.user2.userId).changeUserStatus(status.ready);
-  game.checkingPlayersForReadiness();
+  game.checkPlayersForReadiness();
   expect(game._readinessPlayersToStart).toEqual(false);
   game.findPlayer(users.user3.userId).changeUserStatus(status.ready);
   game.findPlayer(users.user4.userId).changeUserStatus(status.ready);
-  game.checkingPlayersForReadiness();
+  game.checkPlayersForReadiness();
   expect(game._readinessPlayersToStart).toEqual(true);
-  game.givingRoleForPlayers();
+  game.giveRoleForPlayers();
   const user1 = game.findPlayer('1');
   const user2 = game.findPlayer('2');
   const user3 = game.findPlayer('3');

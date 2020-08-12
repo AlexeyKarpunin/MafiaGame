@@ -2,6 +2,7 @@ const express = require('express');
 const {GameRegister} = require('./GameRegister');
 const {User} = require('./User');
 const {generateId} = require('./units');
+const {messages} = require('./config').config;
 const {Game} = require('./Game');
 const app = express();
 app.use(express.json());
@@ -24,7 +25,6 @@ app.get('/api/game/:gameId', (req, res) => {
   }
   res.status(201).json({gameId: gameId, game: game});
 });
-
 // take place at the table
 app.put('/api/game/:gameId/place', (req, res) => {
   const userId = generateId();
@@ -36,12 +36,12 @@ app.put('/api/game/:gameId/place', (req, res) => {
     res.status(404).json({message: 'game was not found'});
   }
   game.takePlace(userId, user, place);
-  res.status(200).json({game: game, player: game._players
+  res.status(200).json({game: game, place: place, player: game._players
       .get(userId), userId: userId});
 });
 
 // change User name
-app.put('/api/game/:gameId/name', (req, res) => {
+app.put('/api/game/:gameId/userName', (req, res) => {
   const {userId, newName} = req.body;
   const {gameId} = req.params;
   const game = register.find(gameId);
@@ -49,13 +49,24 @@ app.put('/api/game/:gameId/name', (req, res) => {
     res.status(404).json({message: 'game was not found'});
   } else {
     const player = game.findPlayer(userId);
-    if (!player) {
+    if (player === messages.PlayerNotFound) {
       res.status(404).json({message: 'player was not found'});
     } else {
       player.changeUserName(newName);
-      res.status(200).json({player: player});
+      res.status(200).json({player: player, game: game});
     }
   }
+});
+
+app.put('/api/game/:gameId/name', (req, res) => {
+  const {gameId} = req.params;
+  const {player, newName} = req.body;
+  const game = register.find(gameId);
+  if (!game) {
+    res.status(404).json({message: 'game was not found'});
+  }
+  game.changeName(player, newName);
+  res.status(200).json({game: game});
 });
 
 // change User status
@@ -67,7 +78,7 @@ app.put('/api/game/:gameId/status', (req, res) => {
     res.status(404).json({message: 'game was not found'});
   } else {
     const player = game.findPlayer(userId);
-    if (!player) {
+    if (player === messages.PlayerNotFound) {
       res.status(404).json({message: 'player was not found'});
     } else {
       player.changeUserStatus(status);
@@ -82,7 +93,7 @@ app.get('/api/game/:gameId/check', (req, res) => {
   if (!game) {
     res.status(404).json({message: 'game was not found'});
   }
-  if (game.checkingPlayersForReadiness()) {
+  if (game.checkPlayersForReadiness()) {
     res.status(200).json({message: 'game can be started'});
   }
   res.status(304).json({message: 'Not all players ready'});
@@ -94,7 +105,7 @@ app.put('/api/game/:gameId/roles', (req, res) => {
   if (!game) {
     res.status(404).json({message: 'game was not found'});
   }
-  game.givingRoleForPlayers();
+  game.giveRoleForPlayers();
   res.status(200).json({message: 'Players were given  roles'});
 });
 

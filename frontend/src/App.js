@@ -1,9 +1,37 @@
-import React, {Component} from 'react';
-import './App.css';
+import React, {Component, Fragment} from 'react';
+import startPage from './startPage'
+import Game from './gameRoom';
 
 const DEFAULT_STATE = {
   gameId: undefined,
   status: undefined,
+  userId: undefined,
+  places: {
+    "player1": {
+      id: undefined,      
+      connectionStatus: false,
+      readinessStatus:false,
+      name: '',
+    },
+    "player2": {
+      id: undefined,      
+      connectionStatus: false,
+      readinessStatus:false,
+      name: '',
+    },
+    "player3": {
+      id: undefined,      
+      connectionStatus: false,
+      readinessStatus:false,
+      name: '',
+    },
+    "player4": {
+      id: undefined,      
+      connectionStatus: false,
+      readinessStatus:false,
+      name: '',
+    },
+  }
 }
 
 class App extends Component {
@@ -14,34 +42,70 @@ class App extends Component {
   
   startGame = async () => {
     const response = await fetch('/api/game', {method: 'POST'});
-    const {gameId} = await response.json();
-    this.setState({gameId});
-    console.log(gameId)
-  }
-  connectTogame = async () => {
-    const gameId = document.querySelector('.Text-gameId').value;
-    const response = await fetch(`/api/game/${gameId}`, {method: 'GET'});
-    const {game} = await response.json();
+    const {gameId, game} = await response.json();
     const status = game._status;
-    this.setState({status});
-    console.log(status)
+    this.setState({gameId, status});
   }
+
+  connectToGame = async () => {
+    const id = document.querySelector('.text-gameId').value;
+    const response = await fetch(`/api/game/${id}`, {method: 'GET'});
+    const {game, gameId} = await response.json();
+    const status = game._status;
+    const places = game._places
+    this.setState({status, gameId, places});
+  }
+
+  takePlace = async (player) => {
+    const response = await fetch(`/api/game/${this.state.gameId}/place`, 
+  {
+    method: 'PUT', 
+    headers: {'Content-Type': 'application/json'}, 
+    body: JSON.stringify(player)
+  })
+    const {userId, game} = await response.json()
+    const places = game._places
+    this.setState({userId, places})
+  }
+  changeName = async (place) => {
+    const body = {
+      newName: document.querySelector('.text-name-area').value,
+      userId: this.state.userId
+    };
+    const responseUser = await fetch(`/api/game/${this.state.gameId}/userName`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    })
+    const {player} = await responseUser.json();
+    const body2 = {
+      newName: player._name,
+      player: place.place
+    };
+    const responseName = await fetch(`/api/game/${this.state.gameId}/name`, {
+      method: 'PUT',
+      headers: {'Content-Type' : 'application/json'},
+      body: JSON.stringify(body2),
+    })
+    
+    const {game} = await responseName.json();
+    const places = game._places;
+    this.setState({places})
+  }
+
   render() {
-    const {gameId} = this.state;
-    const {startGame, connectTogame} = this;
-    const content = <div>Game was started</div>
-    const startPage = <div>Game was not started
-      <button className="start-game" onClick={startGame}>Start Game</button>
-      <input type="text" className="Text-gameId"></input><button className="start-game" onClick={connectTogame}>Connect to game</button>
-      </div>
+    const {gameId, userId, places} = this.state;
+    const {startGame, connectToGame, takePlace, changeName} = this;
+
     return (
-      <React.Fragment>
+      <Fragment>
       <div className="Wrraper">
         <div className="content">
-          { !gameId ? startPage : content }
+          { !gameId ? startPage(startGame, connectToGame) : <Game {...{takePlace, gameId, userId, places, changeName }}/> }
         </div>
+        {console.log(this.state)}
       </div>
-      </React.Fragment>
+      </Fragment>
     );
   }
   }

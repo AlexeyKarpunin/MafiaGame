@@ -1,4 +1,5 @@
-const {status, gameSetForFourthPlayers} = require('../src/config').config;
+// eslint-disable-next-line max-len
+const {status, gameSetForFourthPlayers, messages} = require('../src/config').config;
 /**
  * class Game with setting for game
  */
@@ -10,6 +11,7 @@ class Game {
     this._status = status.created;
     this._players = new Map();
     this._readinessPlayersToStart = false;
+    this._places = gameSetForFourthPlayers.places;
   }
 
   /**
@@ -25,6 +27,8 @@ class Game {
       this._players.set(userId, user);
       const gamer = this._players.get(userId);
       gamer.changeUserPlace(place);
+      this._places[place].id = userId;
+      this._places[place].connectionStatus = true;
       return true;
     } else {
       return false;
@@ -37,14 +41,14 @@ class Game {
   findPlayer(player) {
     const gamer = this._players.get(player);
     if (!gamer) {
-      return false;
+      return messages.PlayerNotFound;
     }
     return gamer;
   }
   /**
    * give roles for plyers
    */
-  givingRoleForPlayers() {
+  giveRoleForPlayers() {
     // eslint-disable-next-line max-len
     let randomNumber = Math.floor(Math.random() * gameSetForFourthPlayers.players);
     this._players.forEach((value) => {
@@ -60,7 +64,7 @@ class Game {
    * checking status of players
    * @return {boolean}
    */
-  checkingPlayersForReadiness() {
+  checkPlayersForReadiness() {
     let counterPlayerWhoReady = 0;
     this._players.forEach((value) => {
       if (value._status === status.ready) {
@@ -71,6 +75,13 @@ class Game {
       this._readinessPlayersToStart = true;
       return true;
     }
+  }
+  /**
+   * @param {string} player
+   * @param {string} newName
+   */
+  changeName(player, newName) {
+    this._places[player].name = newName;
   }
 }
 module.exports = {

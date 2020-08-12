@@ -1,0 +1,105 @@
+.room{
+  display: flex;
+  width: 1400px;
+  height: 700px;
+  margin:  0 auto;
+}
+.room-box-chat {
+  display: flex;
+  margin: 10px 0 5px 5px;
+  width: 400px;
+  flex-direction: column;
+  align-items: center;
+}
+.taimer {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  width: 200px;
+  height: 40px;
+  border: 1px black solid;
+  font-size: 30px;
+}
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: 1px black solid;
+  margin-top: 5px;
+}
+.chats {
+  width: 100%;
+  align-self: flex-start;
+}
+.peace-chat {
+  width: 50%;
+}
+.mafia-chat {
+  width: 50%;
+}
+.role {
+  width: 100%;
+  text-align: center;
+  align-self: flex-end;
+  border: 1px green solid;
+}
+.message {
+  width: 100%;
+  align-self: flex-end;
+}
+.message-area {
+  width: 100%;
+  height: 100%;
+}
+.text-area {
+ width: 86%;
+}
+.room-box-players {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1000px;
+  margin: 10px 5px 5px 5px;
+}
+.room-id {
+ width: 80%;
+ border: 1px black solid;
+}
+.players {
+  display: grid;
+  grid-template-columns: 300px 300px;
+  grid-template-rows: 200px 200px;
+  justify-content: center;
+  grid-gap: 50px;
+  width: 100%;
+  height: 100%;
+  margin-top: 50px;
+}
+.box-player1 {
+  display: flex;
+  border: 1px black solid;
+}
+.player-name {
+  width: 100%;
+  display: flex;
+  align-self: flex-end;
+}
+.text-name-area {
+  width: 240px;
+}
+.ready-button {
+  width: 50px;
+  height: 25px;
+}
+.take-place {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  font-size: 50px;
+}
+.other-player {
+  width: 250px;
+  height: 25px;
+  border: 1px black solid;
+}

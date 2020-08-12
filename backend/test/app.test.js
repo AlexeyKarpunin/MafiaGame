@@ -33,15 +33,15 @@ test('PUT API /api/game/:gameId/place take place on the table', async () => {
   expect(BadPut.status).toEqual(404);
 });
 
-test('PUT API /api/game/:gameId/name change user name', async () => {
+test('PUT API /api/game/:gameId/name change user userName', async () => {
   const put = await request(app)
-      .put(`/api/game/${createGame.body.gameId}/name`)
+      .put(`/api/game/${createGame.body.gameId}/userName`)
       .send({'newName': 'Alex', 'userId': takePlace.body.userId});
   const badPutGameId = await request(app)
-      .put(`/api/game/${invalidGameId}/name`)
+      .put(`/api/game/${invalidGameId}/userName`)
       .send({'newName': 'Alex', 'userId': takePlace.body.userId});
   const badPutUserId = await request(app)
-      .put(`/api/game/${createGame.body.gameId}/name`)
+      .put(`/api/game/${createGame.body.gameId}/userName`)
       .send({'newName': 'Alex', 'userId': 's1231fas1'});
   expect(put.status).toEqual(200);
   expect(badPutGameId.status).toEqual(404);
@@ -53,10 +53,10 @@ test('PUT API /api/game/:gameId/status change user status', async () => {
       .put(`/api/game/${createGame.body.gameId}/status`)
       .send({'status': 'ready', 'userId': takePlace.body.userId});
   const badPutGameId = await request(app)
-      .put(`/api/game/${invalidGameId}/name`)
+      .put(`/api/game/${invalidGameId}/userName`)
       .send({'status': 'ready', 'userId': takePlace.body.userId});
   const badPutUserId = await request(app)
-      .put(`/api/game/${createGame.body.gameId}/name`)
+      .put(`/api/game/${createGame.body.gameId}/userName`)
       .send({'status': 'ready', 'userId': 's1231fas1'});
   expect(put.status).toEqual(200);
   expect(badPutGameId.status).toEqual(404);
