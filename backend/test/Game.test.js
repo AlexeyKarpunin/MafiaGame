@@ -1,6 +1,6 @@
 const {Game} = require('../src/Game');
 const {User} = require('../src/User');
-const {status, messages} = require('../src/config').config;
+const {messages} = require('../src/config').config;
 
 test('takePlace function', () => {
   const game = new Game();
@@ -44,12 +44,12 @@ test('checkingPlayersForReadiness function and givingRoleForPlayers', () => {
   game.takePlace(users.user2.userId, users.user2.user, 'player2');
   game.takePlace(users.user3.userId, users.user3.user, 'player3');
   game.takePlace(users.user4.userId, users.user4.user, 'player4');
-  game.findPlayer(users.user1.userId).changeUserStatus(status.ready);
-  game.findPlayer(users.user2.userId).changeUserStatus(status.ready);
+  game.findPlayer(users.user1.userId).changeUserStatus(true);
+  game.findPlayer(users.user2.userId).changeUserStatus(true);
   game.checkPlayersForReadiness();
   expect(game._readinessPlayersToStart).toEqual(false);
-  game.findPlayer(users.user3.userId).changeUserStatus(status.ready);
-  game.findPlayer(users.user4.userId).changeUserStatus(status.ready);
+  game.findPlayer(users.user3.userId).changeUserStatus(true);
+  game.findPlayer(users.user4.userId).changeUserStatus(true);
   game.checkPlayersForReadiness();
   expect(game._readinessPlayersToStart).toEqual(true);
   game.giveRoleForPlayers();

@@ -1,6 +1,5 @@
 const request = require('supertest');
 const {app} = require('../src/app');
-const {status} = require('../src/config').config;
 
 let createGame;
 let takePlace;
@@ -36,13 +35,17 @@ test('PUT API /api/game/:gameId/place take place on the table', async () => {
 test('PUT API /api/game/:gameId/name change user userName', async () => {
   const put = await request(app)
       .put(`/api/game/${createGame.body.gameId}/userName`)
-      .send({'newName': 'Alex', 'userId': takePlace.body.userId});
+      .send({
+        'newName': 'Alex', 'userId': takePlace.body.userId, 'place': 'player2',
+      });
   const badPutGameId = await request(app)
       .put(`/api/game/${invalidGameId}/userName`)
-      .send({'newName': 'Alex', 'userId': takePlace.body.userId});
+      .send({
+        'newName': 'Alex', 'userId': takePlace.body.userId, 'place': 'player2',
+      });
   const badPutUserId = await request(app)
       .put(`/api/game/${createGame.body.gameId}/userName`)
-      .send({'newName': 'Alex', 'userId': 's1231fas1'});
+      .send({'newName': 'Alex', 'userId': 's1231fas1', 'place': 'player2'});
   expect(put.status).toEqual(200);
   expect(badPutGameId.status).toEqual(404);
   expect(badPutUserId.status).toEqual(404);
@@ -51,13 +54,17 @@ test('PUT API /api/game/:gameId/name change user userName', async () => {
 test('PUT API /api/game/:gameId/status change user status', async () => {
   const put = await request(app)
       .put(`/api/game/${createGame.body.gameId}/status`)
-      .send({'status': 'ready', 'userId': takePlace.body.userId});
+      .send({
+        'status': true, 'userId': takePlace.body.userId, 'place': 'player1',
+      });
   const badPutGameId = await request(app)
       .put(`/api/game/${invalidGameId}/userName`)
-      .send({'status': 'ready', 'userId': takePlace.body.userId});
+      .send({
+        'status': true, 'userId': takePlace.body.userId, 'place': 'player1',
+      });
   const badPutUserId = await request(app)
       .put(`/api/game/${createGame.body.gameId}/userName`)
-      .send({'status': 'ready', 'userId': 's1231fas1'});
+      .send({'status': true, 'userId': 's1231fas1', 'place': 'player1'});
   expect(put.status).toEqual(200);
   expect(badPutGameId.status).toEqual(404);
   expect(badPutUserId.status).toEqual(404);
@@ -71,7 +78,7 @@ test('GET API /api/game/:gameId/check checking readiness players', async () => {
   const userIdForPlayer1 = player1.body.userId;
   await request(app)
       .put(`/api/game/${createGame.body.gameId}/status`)
-      .send({'status': status.ready, 'userId': userIdForPlayer1});
+      .send({'status': true, 'userId': userIdForPlayer1});
   // bad gameId
   const badget = await request(app).
       get(`/api/game/${invalidGameId}/check`);
@@ -79,7 +86,7 @@ test('GET API /api/game/:gameId/check checking readiness players', async () => {
   // second player
   await request(app)
       .put(`/api/game/${createGame.body.gameId}/status`)
-      .send({'status': status.ready, 'userId': takePlace.body.userId});
+      .send({'status': true, 'userId': takePlace.body.userId});
   // third player
   const player3 = await request(app)
       .put(`/api/game/${createGame.body.gameId}/place`)
@@ -87,7 +94,7 @@ test('GET API /api/game/:gameId/check checking readiness players', async () => {
   const userIdForPlayer3 = player3.body.userId;
   await request(app)
       .put(`/api/game/${createGame.body.gameId}/status`)
-      .send({'status': status.ready, 'userId': userIdForPlayer3});
+      .send({'status': true, 'userId': userIdForPlayer3});
   // Early request
   const getEarly = await request(app).
       get(`/api/game/${createGame.body.gameId}/check`);
@@ -99,7 +106,7 @@ test('GET API /api/game/:gameId/check checking readiness players', async () => {
   const userIdForPlayer4 = player4.body.userId;
   await request(app)
       .put(`/api/game/${createGame.body.gameId}/status`)
-      .send({'status': status.ready, 'userId': userIdForPlayer4});
+      .send({'status': true, 'userId': userIdForPlayer4});
   const get = await request(app).
       get(`/api/game/${createGame.body.gameId}/check`);
   expect(get.status).toEqual(200);
