@@ -11,7 +11,32 @@ class Game {
     this._status = status.created;
     this._players = new Map();
     this._readinessPlayersToStart = false;
-    this._places = gameSetForFourthPlayers.places;
+    this._places = {
+      'player1': {
+        id: undefined,
+        connectionStatus: false,
+        readinessStatus: false,
+        name: '',
+      },
+      'player2': {
+        id: undefined,
+        connectionStatus: false,
+        readinessStatus: false,
+        name: '',
+      },
+      'player3': {
+        id: undefined,
+        connectionStatus: false,
+        readinessStatus: false,
+        name: '',
+      },
+      'player4': {
+        id: undefined,
+        connectionStatus: false,
+        readinessStatus: false,
+        name: '',
+      },
+    };
   }
 
   /**
@@ -35,7 +60,7 @@ class Game {
     }
   }
   /**
-   * @param {string} player
+   * @param {string} player id
    * @return {object}
    */
   findPlayer(player) {
@@ -67,7 +92,7 @@ class Game {
   checkPlayersForReadiness() {
     let counterPlayerWhoReady = 0;
     this._players.forEach((value) => {
-      if (value._status === status.ready) {
+      if (value._status === true) {
         counterPlayerWhoReady++;
       }
     });
@@ -82,6 +107,13 @@ class Game {
    */
   changeName(player, newName) {
     this._places[player].name = newName;
+  }
+  /**
+   * @param {string} player
+   * @param {string} status
+   */
+  changeReadinessStatus(player, status) {
+    this._places[player].readinessStatus = status;
   }
 }
 module.exports = {

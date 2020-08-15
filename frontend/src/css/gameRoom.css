@@ -76,7 +76,7 @@
   height: 100%;
   margin-top: 50px;
 }
-.box-player1 {
+.box-player {
   display: flex;
   border: 1px black solid;
 }
@@ -99,7 +99,10 @@
   font-size: 50px;
 }
 .other-player {
-  width: 250px;
+  width: 300px;
   height: 25px;
   border: 1px black solid;
+}
+.green-board {
+  border: 2px green solid;
 }
