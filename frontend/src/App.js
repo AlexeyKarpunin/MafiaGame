@@ -85,6 +85,7 @@ class App extends Component {
       this.setState({places, readinessPlayersToStart});
     }
   }
+
   showRole = async () => {
     const response = await fetch(`/api/game/${this.state.gameId}/roles`, {
       method: 'POST',
@@ -94,12 +95,14 @@ class App extends Component {
     const {role} = await response.json();
     this.setState({role})
   }
+  
   callShowRole (switchForShowRole, readinessPlayersToStart, showRole) {
     if(!switchForShowRole && readinessPlayersToStart) {
       showRole()
       switchForShowRole = true;
     }
   }
+
   render() {
     
     const {gameId, userId, places, role, readinessPlayersToStart} = this.state;
@@ -117,7 +120,7 @@ class App extends Component {
       </Fragment>
     );
   }
-  }
+}
 
 
 
