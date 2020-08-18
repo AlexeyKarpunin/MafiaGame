@@ -1,17 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './css/startPage.css'
 
-function startPage(startGame, connectTogame) {
- return (
-<div className="start-box">
-  <h1 className="start-header">Hello, welcome to mafia game</h1>
-  <div className="start-buttons">
-       <button className="start-game" onClick={startGame}>Start Game</button>
-       <input type="text" className="text-gameId" placeholder="write the id of game here"></input>
-       <button className="connect-to-game" onClick={connectTogame}>Connect to game</button>
-  </div>
-</div>
- );
+class StartPage extends Component {
+  
+startHandleClick = async (startGame, registeryUser, getToken) => {
+    await startGame();
+    await registeryUser();
+    getToken();
 }
- export default startPage;
+
+ render () {
+  const {startGame, getToken, registeryUser} = this.props;
+  const {startHandleClick} = this;
+  return (
+    <div className="start-box">
+      <h1 className="start-header">Hello, welcome to mafia game</h1>
+      <div className="start-buttons">
+           <button className="start-game" onClick={startHandleClick.bind(this, startGame, registeryUser, getToken)}>Start Game</button>
+           <input type="text" className="text-gameId" placeholder="write the id of game here"></input>
+           <button className="connect-to-game" >Connect to game</button>
+      </div>
+    </div>
+  );
+ }
+}
+ export default StartPage;
 

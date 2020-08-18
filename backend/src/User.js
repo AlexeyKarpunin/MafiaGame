@@ -1,4 +1,4 @@
-const {status} = require('../src/config').config;
+
 /**
  *  class user
  */
@@ -10,7 +10,7 @@ class User {
    */
   constructor() {
     this._name = '';
-    this._status = status.notReady;
+    this._status = undefined;
     this._role = undefined;
     this._place = '';
   }
