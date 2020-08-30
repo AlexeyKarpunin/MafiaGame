@@ -1,4 +1,4 @@
-import API from "./fetch";
+import API from "./API";
 
 class SessionStorage extends API {
   constructor () {

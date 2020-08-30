@@ -1,58 +1,48 @@
 import React, {Fragment} from 'react';
-import StartPage from './startPage'
-import Game from './gameRoom';
-import SessionStorage from './sessionStorage';
+import StartPage from './startPage';
+import Api from './API';
+import Game from './Game';
 
+
+function generateId() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r && 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
 
 const DEFAULT_STATE = {
   gameId: undefined,
-  status: undefined,
-  role: undefined,
-  readinessPlayersToStart: false,
+  gameStatus: undefined,
   userId: undefined,
   token: undefined,
-  place: undefined,
-  name: undefined
+  civilian: undefined,
+  mafia: undefined,
+  arrayOfPlacesForGame: [],
+  place: undefined
 }
 
-class App extends SessionStorage {
+class App extends Api {
   constructor () {
     super();
     this.state = {...DEFAULT_STATE};
   }
-  componentDidMount() {
-    this.resiveRoleofPlayer = setInterval(
-      () => this.resiveRole(),
-      1000
-    );
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.resiveRoleofPlayer);
-  }
-
-
+  
   render() {
-    const {gameId, place, readinessPlayersToStart, role} = this.state;
-    const {startGame, getToken, registeryUser, checkSessionStorage, connectToGame, takePlace, changeUserName, changeUserStatus, checkReadiessPlayers, giveRolesForPlayers} = this;
-
+    const {userId, gameId} = this.state;
+    const {api, state} = this;
+    
     return (
       <Fragment>
+        {!userId ? this.setState({userId: generateId()}) : null}
       <div className="Wrraper"> 
         <div className="content">
-          { !gameId ? checkSessionStorage() : null }
-          { !gameId ? <StartPage {...{startGame, registeryUser, getToken, connectToGame}}/> 
-          :  <Game {...{role, gameId, takePlace, place, changeUserName, changeUserStatus, checkReadiessPlayers, readinessPlayersToStart, giveRolesForPlayers}} /> }
-          {console.log(this.state)}
+    {!gameId ? <StartPage {...{api}}/> : <Game {...{state, api}} /> }
         </div>
       </div>
       </Fragment>
     );
   }
 }
-
-
-
-
 
 export default App;

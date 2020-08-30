@@ -34,6 +34,8 @@ class GameRegister {
   }
 };
 
+const register = new GameRegister();
+
 module.exports = {
-  GameRegister,
+  register,
 };

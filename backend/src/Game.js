@@ -1,111 +1,81 @@
-const {User} = require('./User');
 const {statuses} = require('../../Api/statuses');
-const {roles} = require('../../Api/roles');
+
+const DEFAULT_PLAYER = {
+  free: true,
+  userId: undefined,
+  place: undefined,
+  role: undefined,
+  status: undefined,
+};
 
 /**
- * class Game with setting for game
+ * class Game has setting for game and logic of game
  */
 class Game {
   /**
-   * this is constructor
+   * constructor ...
    */
   constructor() {
-    this._status = 'created';
-    this._players = new Map();
-    this._readinessPlayersToStart = false;
+    this.gameStatus = statuses.created;
+    this.GameStatus = statuses.created;
+    this.civilian = undefined;
+    this.mafia = undefined;
+    this.players = [];
   }
   /**
-   * @param {number} value
-   * @return {string}
+   * this function take setting for game and change them
+   * @param {string} civilian
+   * @param {string} mafia
    */
-  findName(value) {
-    let name;
-    this._players.forEach( (user) => {
-      if (user._place === value) {
-        name = user._name;
-      }
-    });
-    return name;
+  gameSettings(civilian, mafia) {
+    this.civilian = civilian;
+    this.mafia = mafia;
   }
   /**
-   * @param {number} value
-   * @return {string}
+   * this function add players in array
    */
-  findStatus(value) {
-    let status;
-    this._players.forEach( (user) => {
-      if (user._place === value) {
-        status = user._status;
-      }
-    });
-    return status;
-  }
-  /**
-   * @param {number} value
-   * @return {boolean}
-   */
-  findPlace(value) {
-    let result = false;
-    this._players.forEach( (user) => {
-      if (user._place === value) {
-        result = true;
-      }
-    });
-    return result;
-  }
-  /**
-   * @param {string} player id
-   * @return {object|undefined}
-   */
-  findPlayer(player) {
-    const gamer = this._players.get(player);
-    if (!gamer) {
-      return undefined;
+  addPlayers() {
+    let players = Number(this.mafia) + Number(this.civilian);
+    while (players !== 0) {
+      this.players.push(Object.assign({}, DEFAULT_PLAYER));
+      players--;
     }
-    return gamer;
   }
   /**
+   * this function take place for player
+   * @param {string} place
    * @param {string} userId
+   * @return {object} message for app;
    */
-  playersRegistery(userId) {
-    this._players.set(userId, new User());
-  }
-  /**
-   * @return {boolean}
-   */
-  checkReadiessPlayers() {
-    const amountPlayers = 4;
-    let counteRreadinessPlayers = 0;
-    this._players.forEach( (user)=> {
-      if (user._status === statuses.ready) {
-        counteRreadinessPlayers++;
-      }
-    });
-    if ( amountPlayers === counteRreadinessPlayers) {
-      this._readinessPlayersToStart = true;
-      return true;
-    } else {
-      return false;
-    }
-  }
-  /**
-   * give roles for players
-   */
-  giveRoleForPlayers() {
-    // eslint-disable-next-line max-len
-    let randomNumber = Math.floor(Math.random() * this._players.size);
-    if (this._readinessPlayersToStart) {
-      this._players.forEach((value) => {
-        if (randomNumber === 0) {
-          value._role = roles.mafia;
-        } else {
-          value._role = roles.peace;
+  takePlace(place, userId) {
+    const playersArray = this.players;
+    /**
+     * check the free place and return boolean
+     * @return {boolean}
+     */
+    function helper() {
+      for (let i = 0; i < playersArray.length; i++) {
+        if (playersArray[i].place === place) {
+          return false;
         }
-        randomNumber--;
-      });
+      }
+      return true;
+    };
+    if (helper()) {
+      for (let i = 0; i < playersArray.length; i++) {
+        if (playersArray[i].free) {
+          playersArray[i].place = place;
+          playersArray[i].userId = userId;
+          playersArray[i].free = false;
+          return {message: 'success', place: place};
+        }
+      }
+      return {message: 'All places occupated'};
     }
-  }
-}
+    return {message: 'this place was occupated'};
+  };
+};
+
 module.exports = {
   Game,
 };

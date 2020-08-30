@@ -42,7 +42,6 @@
   width: 100%;
   text-align: center;
   align-self: flex-end;
-  border: 1px green solid;
 }
 .message {
   width: 100%;
@@ -68,18 +67,35 @@
 }
 .players {
   display: grid;
-  grid-template-columns: 300px 300px;
-  grid-template-rows: 200px 200px;
   justify-content: center;
-  grid-gap: 50px;
   width: 100%;
   height: 100%;
   margin-top: 50px;
 }
+
+.fouth-players {
+  grid-template-columns: 300px 300px;
+  grid-template-rows: repeat(2, 200px);
+  grid-gap: 50px;
+}
+
+.sixth-players {
+  grid-template-columns: repeat(3, 300px);
+  grid-template-rows: repeat(2, 200px);
+  grid-gap: 50px;
+}
+
+.ninth-players {
+  grid-template-columns: repeat(3, 250px);
+  grid-template-rows: repeat(3, 150px);
+  grid-gap: 30px;
+}
+
 .box-player {
   display: flex;
-  border: 1px black solid;
+  border: 1px solid black;
 }
+
 .player-name {
   width: 100%;
   display: flex;
@@ -93,9 +109,9 @@
   height: 25px;
 }
 .take-place {
-  position: absolute;
-  width: 300px;
-  height: 200px;
+  position: relative;
+  width: inherit;
+  height: inherit;
   font-size: 50px;
 }
 .other-player {
@@ -105,4 +121,17 @@
 }
 .green-board {
   border: 2px green solid;
+}
+.box-player {
+  width: inherit;
+  height: inherit;
+}
+.players-box-four {
+  margin-left: 750px;
+}
+.players-box-six {
+  margin-left: 600px;
+}
+.players-box-nine {
+  margin-left: 400px;
 }
