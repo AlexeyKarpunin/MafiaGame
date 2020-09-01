@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/gameRoom.css'
+import Table from './Table'
 
 class Place extends React.Component {
 constructor () {
@@ -22,32 +23,24 @@ take(api, state) {
    )
 }
 
-yourPlace (place, placeNum) {
-    if (place === placeNum + '') {
-      return (
-<div className="box-player">
-       <div className="player-name">
-         <input type="text" className="text-name-area" placeholder="write your name and push button >>>" autocomplete="new-password"></input>
-         <button className="ready-button"></button>
-       </div>
-</div>
-      )
-    } else {
-      return (
-      <div className="box-player">
-           <div className="player-name">
-               <div className="other-player"></div>
-           </div> 
-      </div>
-      )
-    }
+PlaceWasOccupated () {
+  return (
+    <div className="box-player">
+         <button className="take-place"></button>
+    </div>
+  )
 }
+
   render () {
     const {state, api, placeNum} = this.props;
     if (!state.place) {
-      return this.take(api, state)
+      const occupatedPlace = state.players.filter(player => player.place === placeNum + '');
+      if (occupatedPlace.length === 1) {
+        return this.PlaceWasOccupated();
+      }
+      return this.take(api, state);
     } else {
-      return this.yourPlace(state.place, placeNum)
+      return  <Table {...{state, placeNum, api}} /> //this.yourPlace(state, placeNum, api)
     }
   }
 }

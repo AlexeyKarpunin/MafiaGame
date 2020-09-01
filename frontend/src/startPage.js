@@ -43,9 +43,10 @@ class Startpage extends React.Component {
 
   connectToGameClick (api) {
     const {civilian, mafia} = this.state;
+    const id = document.querySelector('.text-gameId').value;
     async function click () {
-      await api.connectToGame();
-      api.cretePlacesForPlayers(Number(civilian) + Number(mafia));
+      await api.connectToGame(id);
+      await api.cretePlacesForPlayers(Number(civilian) + Number(mafia));
       api.getToken();
     }
     click();
