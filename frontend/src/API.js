@@ -23,8 +23,8 @@ class Api extends React.Component {
 
       connectToGame: async (id) => {
         const response = await fetch(`/api/games/${id}`, {method: 'GET'});
-        const {gameId, mafia, civilian} = await response.json()
-        this.setState({gameId, mafia, civilian});
+        const {mafia, civilian, arrayOfPlacesForGame, gameId} = await response.json()
+        this.setState({mafia, civilian, arrayOfPlacesForGame, gameId});
       },
 
       settingForGame: async (param1, param2) => {
@@ -33,8 +33,8 @@ class Api extends React.Component {
           headers: {'Content-Type': 'Application/json'},
           body: JSON.stringify({civilian: param1, mafia: param2})
         })
-        const {civilian, mafia} = await response.json();
-        this.setState({civilian, mafia});
+        const {civilian, mafia, arrayOfPlacesForGame} = await response.json();
+        this.setState({civilian, mafia, arrayOfPlacesForGame});
       },
 
       cretePlacesForPlayers: (number) => {
@@ -82,6 +82,10 @@ class Api extends React.Component {
         const {name} = await response.json();
         this.setState({name});
       },
+
+      giveRolesForPlayers: async () => {
+         await fetch(`/api/games/${this.state.gameId}/roles`, {method: 'PUT'});
+      }
     }
   }
 }

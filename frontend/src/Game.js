@@ -30,13 +30,13 @@ class Game extends React.Component {
         break;
       default:
         classNamePlayers += " fouth-players";
-        classNamePlayerBox += " 'players-box-four";
+        classNamePlayerBox += " players-box-four";
     }
 
     return (
       <div className="room">
         <div className="room-box-players">
-    <div className="room-id" onClick={console.log(state)}>Game id: {state.gameId}</div>
+    <div className="room-id" onClick={console.log(state)}>Game id: {state.gameId} You role: {state.role} Timer: {state.timer}</div>
           <div className={classNamePlayerBox}>
             <div className={classNamePlayers}>
               { state.arrayOfPlacesForGame.map( value => {

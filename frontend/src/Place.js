@@ -40,7 +40,7 @@ PlaceWasOccupated () {
       }
       return this.take(api, state);
     } else {
-      return  <Table {...{state, placeNum, api}} /> //this.yourPlace(state, placeNum, api)
+      return  <Table {...{state, placeNum, api}} />
     }
   }
 }

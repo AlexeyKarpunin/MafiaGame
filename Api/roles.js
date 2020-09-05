@@ -1,6 +1,6 @@
 const roles = {
   mafia: 'Mafia',
-  peace: 'Peace',
+  peace: 'civilial',
 };
 
 module.exports = {

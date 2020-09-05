@@ -34,7 +34,6 @@ class Startpage extends React.Component {
     async function click () {
       await api.startGame();
       await api.settingForGame(civilian, mafia);
-      await api.cretePlacesForPlayers(Number(civilian) + Number(mafia));
       await api.addPlayerInBackend();
       api.getToken();
     }
@@ -42,11 +41,9 @@ class Startpage extends React.Component {
   }
 
   connectToGameClick (api) {
-    const {civilian, mafia} = this.state;
     const id = document.querySelector('.text-gameId').value;
     async function click () {
       await api.connectToGame(id);
-      await api.cretePlacesForPlayers(Number(civilian) + Number(mafia));
       api.getToken();
     }
     click();
@@ -66,7 +63,6 @@ class Startpage extends React.Component {
       const {startClick, connectToGameClick, menu} = this;
       const {menuSetupGame} = this.state;
       const buttonMenuSetup = <button className="setup-button" onClick={this.handleClick}><img alt='gear' src={gear} className='gear'></img></button>
-      
       return (
         <div className="start-box">
           <h1 className="start-header">Hello, welcome to mafia game</h1>

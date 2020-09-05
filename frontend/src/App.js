@@ -19,6 +19,7 @@ const DEFAULT_STATE = {
   mafia: undefined,
   arrayOfPlacesForGame: [],
   players: [],
+  timer: undefined,
   // user
   userId: undefined,
   userStatus: undefined,
@@ -46,9 +47,12 @@ class App extends Api {
 
   gameInfo = async () => {
     if (this.state.gameId) {
-       const response = await fetch(`/api/games/${this.state.gameId}/info`, {method: 'GET'});
-       const {players, civilian, mafia, gameStatus} = await response.json();
-       this.setState({players, civilian, mafia, gameStatus})
+       const response = await fetch(`/api/games/${this.state.gameId}/info`, {
+         method: 'GET',
+         headers: {'Authorization': this.state.token}
+        });
+       const {players, civilian, mafia, gameStatus, role, userStatus, timer} = await response.json();
+       this.setState({players, civilian, mafia, gameStatus, role, userStatus, timer})
     }
   }
   
@@ -61,7 +65,7 @@ class App extends Api {
         {!userId ? this.setState({userId: generateId()}) : null}
       <div className="Wrraper"> 
         <div className="content">
-    {!gameId ? <StartPage {...{api}}/> : <Game {...{state, api}} /> }
+    {!gameId ? <StartPage {...{api, state}}/> : <Game {...{state, api}} /> }
         </div>
       </div>
       </Fragment>

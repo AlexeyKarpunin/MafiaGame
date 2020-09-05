@@ -122,6 +122,9 @@
 .green-board {
   border: 2px green solid;
 }
+.blue-board {
+  border: 4px blue solid;
+}
 .box-player {
   width: inherit;
   height: inherit;

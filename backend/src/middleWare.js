@@ -1,5 +1,8 @@
 /* eslint-disable require-jsdoc */
 const {register} = require('./gameRegister');
+const jwt = require('jsonwebtoken');
+
+const secret = 'secretMafiaGameToken';
 
 function checkGame(req, res, next) {
   const {gameId} = req.params;
@@ -10,6 +13,22 @@ function checkGame(req, res, next) {
   next();
 }
 
+function checkToken(req, res, next) {
+  const autoHeader = req.get('Authorization');
+  if (!autoHeader) {
+    res.status(401).json({message: 'token not provided!'});
+  }
+  const token = autoHeader.replace('Bearer ', '');
+  const payload = jwt.verify(token, secret);
+  if (!payload) {
+    res.status(401).json({message: 'Invalid token'});
+  }
+  next();
+}
+
 module.exports = {
   checkGame,
+  checkToken,
 };
+
+
