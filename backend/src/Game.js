@@ -166,42 +166,54 @@ class Game {
    * this function start the timer and give opportunity for speak every players
    */
   speakRound() {
-    this.players[this.index].status = statuses.speaker;
     this.gameStatus = statuses.speakRound;
-    const int = setInterval( () => {
-      this.timer--;
-      if (this.timer === 0) {
-        this.players[this.index].status = statuses.alive;
-        this.index++;
-        this.timer = 5;
-        clearInterval(int);
-        if (this.index < this.players.length) {
-          this.speakRound();
-        } else {
-          this.index = 0;
-          if (this.round % 2 === 0) {
-            this.voteCivilian();
+    if (this.players[this.index].status !== statuses.dead) {
+      this.players[this.index].status = statuses.speaker;
+      const int = setInterval( () => {
+        this.timer--;
+        if (this.timer === 0) {
+          this.players[this.index].status = statuses.alive;
+          this.index++;
+          this.timer = 5;
+          clearInterval(int);
+          if (this.index < this.players.length) {
+            this.speakRound();
           } else {
-            this.voteMafia();
+            this.index = 0;
+            if (this.round % 2 === 0) {
+              this.voteCivilian();
+            } else {
+              this.voteMafia();
+            }
           }
         }
-      }
-    }, 1000);
+      }, 1000);
+    }
   }
   /**
    * 
    */
   voteMafia() {
-    this.round++;
     this.gameStatus = statuses.night;
     this.vote = new Vote();
-    this.vote.addMafia(this.players);
+    this.vote.addPlayerOnVote(this.players);
     const int = setInterval( () => {
       this.timer--;
       if (this.timer === 0) {
         this.timer = 5;
         clearInterval(int);
-        this.vote.checkPlayersOnDead();
+        const result = this.vote.checkPlayersOnDead();
+        if (result === false || result === undefined) {
+          this.voteMafia();
+        } else {
+          for (let i = 0; i < this.players.length; i++) {
+            if (this.players[i].userId === result[0]) {
+              this.players[i].status = statuses.dead;
+            }
+          }
+          this.round++;
+          this.speakRound();
+        }
       }
     }, 1000);
   }
@@ -210,6 +222,16 @@ class Game {
    */
   voteCivilian() {
 
+  }
+  /**
+   * 
+   */
+  voting(name) {
+    for (let i = 0; i < this.players.length; i++) {
+      if (name === this.players[i].name) {
+        this.vote.playersOnVote.set(this.players[i].userId, this.vote.playersOnVote.get(this.players[i].userId) + 1);
+      }
+    }
   }
 };
 

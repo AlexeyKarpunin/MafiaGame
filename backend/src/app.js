@@ -21,6 +21,9 @@ app.put('/api/players/place', middleWare.checkToken, controllers.changePlace);
 app.put('/api/players/:playerId/status', middleWare.checkToken, controllers.changePlayerStatus);
 app.put('/api/players/:playerId/name', middleWare.checkToken, controllers.changePlayerName);
 
+//
+app.put('/api/game/:gameId/vote', middleWare.checkGame, middleWare.checkToken, controllers.vote);
+
 module.exports = {
   app,
 };

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const {generateId} = require('../../Api/generateId');
-const {register} = require('./gameRegister');
+const {register} = require('./GameRegister');
 const {Game} = require('./Game');
 const helper = require('./helpers');
 
@@ -146,6 +146,14 @@ const giveRoles = (req, res) => {
   res.status(200).json(result);
 };
 
+const vote = (req, res) => {
+  const {gameId} = req.params;
+  const {name} = req.body;
+  const game = register.find(gameId);
+  game.voting(name);
+  res.status(200).json({message: `Your vote was given ${name}`});
+};
+
 module.exports = {
   getToken,
   createGame,
@@ -157,4 +165,5 @@ module.exports = {
   changePlayerName,
   gameInfo,
   giveRoles,
+  vote,
 };

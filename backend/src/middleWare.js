@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-const {register} = require('./gameRegister');
+const {register} = require('./GameRegister');
 const jwt = require('jsonwebtoken');
 
 const secret = 'secretMafiaGameToken';

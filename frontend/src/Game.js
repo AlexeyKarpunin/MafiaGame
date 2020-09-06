@@ -1,6 +1,7 @@
 import React from 'react'
 import './css/gameRoom.css'
 import Place from './Place'
+import Night from './Night'
 
 class Game extends React.Component {
 
@@ -37,6 +38,7 @@ class Game extends React.Component {
       <div className="room">
         <div className="room-box-players">
     <div className="room-id" onClick={console.log(state)}>Game id: {state.gameId} You role: {state.role} Timer: {state.timer}</div>
+    { state.gameStatus === 'night' ? <Night {...{state, api}} /> :
           <div className={classNamePlayerBox}>
             <div className={classNamePlayers}>
               { state.arrayOfPlacesForGame.map( value => {
@@ -46,6 +48,7 @@ class Game extends React.Component {
               })}
             </div>
           </div>
+    }
         </div>
       </div>
     )

@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import StartPage from './startPage';
 import Api from './API';
 import Game from './Game';
-
+import './css/night.css'
 
 function generateId() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {

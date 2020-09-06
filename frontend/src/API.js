@@ -85,6 +85,14 @@ class Api extends React.Component {
 
       giveRolesForPlayers: async () => {
          await fetch(`/api/games/${this.state.gameId}/roles`, {method: 'PUT'});
+      },
+
+      vote: async (name) => {
+        await fetch(`/api/game/${this.state.gameId}/vote`, {
+          method: 'PUT',
+          headers: {'Authorization': this.state.token, 'Content-Type': 'Application/json'},
+          body: JSON.stringify({name: name})
+        })
       }
     }
   }

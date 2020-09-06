@@ -1,4 +1,5 @@
 const {roles} = require('../../Api/roles');
+const {statuses} = require('../../Api/statuses');
 /**
  * class
  */
@@ -7,37 +8,40 @@ class Vote {
    * constructor
    */
   constructor() {
-    this.playersOnVote = [];
+    this.playersOnVote = new Map();
   }
   /**
    * 
    * @param {array} players
    */
-  addMafia(players) {
-    for (let i = 0; i < players.length; i++) {
-      if (players[i].role === roles.peace) {
-        players[i].counter = 0;
-        this.playersOnVote.push(players[i]);
+  addPlayerOnVote(players) {
+    for (let i = 0; i < players.length; i ++) {
+      if (players[i].status !== statuses.dead) {
+        this.playersOnVote.set(players[i].userId, 0);
       }
-    }
-  }
-  /**
-   * 
-   * @param {array} players
-   */
-  addCivilian(players) {
-    for (let i = 0; i < players.length; i++) {
-      players[i].counter = 0;
-      this.playersOnVote.push(players[i]);
     }
   }
   /**
    * 
    */
   checkPlayersOnDead() {
-    let result = [];
-    for ( let i = 0; i < this.playersOnVote.length; i++) {
-      
+    const players = Array.from(this.playersOnVote);
+    const sameVote = [];
+    let max = 0;
+    for (let i = 0; i < players.length; i++) {
+      if (players[i][1] > max) {
+        max = players[i][1];
+      }
+    }
+    for (let i = 0; i < players.length; i++) {
+      if (players[i][1] === max) {
+        sameVote.push(players[i]);
+      }
+    }
+    if (sameVote.length === 1) {
+      return sameVote[0];
+    } else {
+      return false;
     }
   }
 }
